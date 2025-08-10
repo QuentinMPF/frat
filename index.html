@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAT 2026 - Prévention et Accompagnement</title>
+    <!-- Utilisation de Tailwind CSS pour un design moderne et responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #334155;
+        }
+        .container {
+            max-width: 1024px;
+        }
+        .section-title {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background-color: #fcd34d;
+            border-radius: 9999px;
+        }
+        .accordion-header {
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 1000px; /* Increased to accommodate more content */
+        }
+        .btn-call {
+            transition: transform 0.2s ease-in-out;
+        }
+        .btn-call:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header et page d'accueil -->
+    <main id="main-content" class="flex-grow flex items-center justify-center p-4">
+        <div id="home-screen" class="container mx-auto text-center">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+                FRAT 2026<br>Prévention et Accompagnement
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Bienvenue sur le site de prévention et de sensibilisation pour le rassemblement de Jambville.
+                Choisissez votre espace pour accéder aux informations.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8">
+                <button onclick="showSection('jeunes-section')" class="bg-indigo-600 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105">
+                    Espace Jeunes
+                </button>
+                <button onclick="showSection('encadrants-section')" class="bg-gray-800 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-gray-900 transition duration-300 transform hover:scale-105">
+                    Espace Encadrants
+                </button>
+            </div>
+        </div>
+
+        <!-- Section pour les Jeunes (cachée par défaut) -->
+        <div id="jeunes-section" class="container mx-auto p-6 hidden">
+            <h2 class="text-3xl font-bold section-title text-gray-800">Espace Jeunes</h2>
+            <p class="text-gray-600 mb-6">
+                Bienvenue ! Cette section te donne des clés pour mieux vivre ton FRAT et au quotidien.
+            </p>
+
+            <!-- Accordéon pour les thèmes des jeunes -->
+            <div class="space-y-4">
+                <!-- Internet et jeux vidéos -->
+                <div class="bg-white rounded-xl shadow-md p-4">
+                    <div onclick="toggleAccordion('jeunes-internet')" class="accordion-header flex justify-between items-center text-xl font-semibold text-indigo-600">
+                        Internet, réseaux sociaux et jeux vidéo
+                        <span id="jeunes-internet-icon" class="text-2xl transform transition-transform duration-300">+</span>
+                    </div>
+                    <div id="jeunes-internet-content" class="accordion-content pt-2">
+                        <p class="text-gray-700 mb-4">
+                            Internet et les réseaux sociaux sont des outils fantastiques pour communiquer, mais ils peuvent aussi être risqués. Pense à bien <strong>protéger tes informations personnelles</strong> et à ne pas tout partager. N'oublie pas que ce qui est mis en ligne peut y rester pour toujours. Apprends à faire la différence entre l'info et la désinformation.
+                        </p>
+                        <p class="text-gray-700">
+                            Concernant les jeux vidéo, ils sont un excellent moyen de s'amuser, mais il est important de <strong>garder l'équilibre</strong>. Gérer ton temps de jeu et ne pas t'isoler sont des clés pour en profiter sans que ça devienne un problème.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Violences et harcèlement -->
+                <div class="bg-white rounded-xl shadow-md p-4">
+                    <div onclick="toggleAccordion('jeunes-harcelement')" class="accordion-header flex justify-between items-center text-xl font-semibold text-indigo-600">
+                        Violences, harcèlement et cyber-harcèlement
+                        <span id="jeunes-harcelement-icon" class="text-2xl transform transition-transform duration-300">+</span>
+                    </div>
+                    <div id="jeunes-harcelement-content" class="accordion-content pt-2">
+                        <p class="text-gray-700 mb-4">
+                            Le harcèlement, c'est quand une personne subit des paroles ou des actes méchants de manière répétée. Le <strong>cyber-harcèlement</strong>, c'est la même chose, mais via internet et les réseaux sociaux. C'est une violence, et elle est inacceptable.
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            Si tu en es <strong>victime ou témoin</strong>, parles-en ! Un animateur, un parent, un ami de confiance... La première étape est de ne pas rester seul. Tu as le droit d'être respecté et de te sentir en sécurité.
+                        </p>
+                        <p class="text-gray-700">
+                            <strong>Ne sois pas complice.</strong> Si tu vois des moqueries en ligne ou en vrai, ne participe pas et défends la personne.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Addictions -->
+                <div class="bg-white rounded-xl shadow-md p-4">
+                    <div onclick="toggleAccordion('jeunes-addictions')" class="accordion-header flex justify-between items-center text-xl font-semibold text-indigo-600">
+                        Addictions (tabac, alcool, stupéfiants, protoxyde)
+                        <span id="jeunes-addictions-icon" class="text-2xl transform transition-transform duration-300">+</span>
+                    </div>
+                    <div id="jeunes-addictions-content" class="accordion-content pt-2">
+                        <p class="text-gray-700 mb-4">
+                            Pendant un rassemblement comme le FRAT, on peut être tenté de faire comme les autres. Mais l'<strong>alcool, le tabac et les stupéfiants</strong> sont dangereux pour ta santé physique et mentale.
+                        </p>
+                        <p class="text-gray-700">
+                            Le <strong>protoxyde d'azote</strong> (ou "proto") est particulièrement dangereux. Il peut causer des lésions nerveuses graves et irréversibles. Ce n'est pas un jeu. Ta santé est ta priorité. N'hésite pas à dire non si on t'en propose, et parles-en si tu as des questions ou des inquiétudes.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Relations et consentement -->
+                <div class="bg-white rounded-xl shadow-md p-4">
+                    <div onclick="toggleAccordion('jeunes-relations')" class="accordion-header flex justify-between items-center text-xl font-semibold text-indigo-600">
+                        Relations (garçon/fille, avec les animateurs) et consentement
+                        <span id="jeunes-relations-icon" class="text-2xl transform transition-transform duration-300">+</span>
+                    </div>
+                    <div id="jeunes-relations-content" class="accordion-content pt-2">
+                        <p class="text-gray-700 mb-4">
+                            Le <strong>consentement</strong>, c'est le fait d'être d'accord. Pour être valable, il doit être libre et enthousiaste. Si la réponse n'est pas un "oui" clair, c'est "non". Cela s'applique à toutes les relations : amicales ou amoureuses. On a le droit de changer d'avis à tout moment.
+                        </p>
+                        <p class="text-gray-700">
+                            Tes animateurs sont là pour t'aider et te protéger. Ils doivent maintenir une distance de respect. Si tu te sens mal à l'aise avec un animateur, s'il te demande de le rejoindre seul, parles-en immédiatement à un autre adulte de confiance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ajout des conseils aléatoires pour les jeunes -->
+            <div class="mt-8 p-6 bg-yellow-100 rounded-xl shadow-md">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Besoin d'un conseil ?</h3>
+                <p class="text-gray-600 mb-4">
+                    Clique sur le bouton pour recevoir un conseil aléatoire pour t'aider à vivre ton FRAT et ta foi.
+                </p>
+                <button onclick="displayRandomAdvice('jeunes')" class="bg-yellow-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-yellow-600 transition duration-300">
+                    Conseil du jour
+                </button>
+                <div id="jeunes-advice-display" class="mt-4 p-4 bg-white rounded-lg shadow-inner text-gray-700 hidden"></div>
+            </div>
+
+            <!-- Bouton pour revenir à l'accueil -->
+            <button onclick="showSection('home-screen')" class="mt-8 bg-gray-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-gray-600 transition duration-300">
+                Retour à l'accueil
+            </button>
+        </div>
+
+        <!-- Section pour les Encadrants (cachée par défaut) -->
+        <div id="encadrants-section" class="container mx-auto p-6 hidden">
+            <h2 class="text-3xl font-bold section-title text-gray-800">Espace Encadrants</h2>
+            <p class="text-gray-600 mb-6">
+                Cet espace est conçu pour vous accompagner dans votre rôle auprès des jeunes.
+            </p>
+
+            <!-- Thèmes pour les encadrants -->
+            <div class="bg-white rounded-xl shadow-md p-6 mb-4">
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Détecter, discuter et orienter</h3>
+                <p class="text-gray-600 mb-4">
+                    Votre rôle d'encadrant vous place en position d'observateur privilégié. Soyez attentifs aux signaux de détresse : un repli sur soi, une irritabilité inhabituelle, des sautes d'humeur, une fatigue persistante. N'hésitez pas à proposer une discussion à l'écart du groupe, dans un lieu sécurisé et visible, sans porter de jugement. Votre écoute est la première étape.
+                </p>
+                <p class="text-gray-600">
+                    Si un jeune vous confie un problème grave, votre devoir est de l'orienter vers une personne qualifiée : un membre de l'équipe d'encadrement supérieur, un psychologue du rassemblement, ou les autorités compétentes si nécessaire.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Rappels sur votre posture</h3>
+                <p class="text-gray-600 mb-4">
+                    En tant qu'adulte, vous êtes un modèle et un protecteur. Maintenez une distance de respect et de professionnalisme.
+                    <ul>
+                        <li><strong class="text-red-500">Ne vous isolez jamais avec un mineur.</strong> Les rencontres, les discussions et les activités doivent toujours se faire en groupe ou en présence d'un autre adulte.</li>
+                        <li>Respectez le cadre de l'animation, les règles de l'organisation et la vie privée des jeunes.</li>
+                        <li>Soyez clairs sur votre rôle : vous êtes un animateur, pas un ami. Le respect et la confiance se construisent sur cette clarté.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <!-- Ajout des conseils aléatoires pour les encadrants -->
+            <div class="mt-8 p-6 bg-yellow-100 rounded-xl shadow-md">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Besoin d'un conseil ?</h3>
+                <p class="text-gray-600 mb-4">
+                    Cliquez sur le bouton pour recevoir un conseil aléatoire pour votre mission d'encadrant.
+                </p>
+                <button onclick="displayRandomAdvice('encadrants')" class="bg-yellow-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-yellow-600 transition duration-300">
+                    Conseil du jour
+                </button>
+                <div id="encadrants-advice-display" class="mt-4 p-4 bg-white rounded-lg shadow-inner text-gray-700 hidden"></div>
+            </div>
+
+            <!-- Bouton pour revenir à l'accueil -->
+            <button onclick="showSection('home-screen')" class="mt-8 bg-gray-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-gray-600 transition duration-300">
+                Retour à l'accueil
+            </button>
+        </div>
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="bg-gray-900 text-gray-400 py-6 px-4 text-center">
+        <div class="container mx-auto">
+            <div class="mb-4">
+                <p class="font-bold text-gray-200 mb-2">Numéros d'urgence :</p>
+                <div class="flex flex-wrap justify-center space-x-4">
+                    <a href="tel:15" class="btn-call bg-red-600 text-white font-bold py-2 px-4 rounded-full hover:bg-red-700">SAMU (15)</a>
+                    <a href="tel:17" class="btn-call bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700">Gendarmerie (17)</a>
+                    <a href="tel:18" class="btn-call bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-yellow-600">Pompiers (18)</a>
+                    <a href="tel:112" class="btn-call bg-white text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-gray-200">Urgences européennes (112)</a>
+                </div>
+            </div>
+            <div class="text-sm">
+                <p>Ce site est créé par la Maison de Protection des Familles des Yvelines, une unité de la <a href="https://www.gendarmerie.interieur.gouv.fr" class="text-blue-400 hover:text-blue-300 font-semibold" target="_blank">Gendarmerie Nationale</a>.</p>
+                <p>Développé avec l'aide de <span class="text-emerald-400 font-semibold">Gemini</span>, un grand modèle linguistique de Google.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script JavaScript pour la navigation et les conseils aléatoires -->
+    <script>
+        // Définition des listes de conseils
+        const conseilsJeunes = [
+            "Le harcèlement n'est pas un jeu. Si tu en es témoin, défends la personne et parles-en à un adulte.",
+            "Prends un moment pour prier, même quelques secondes. La foi est un soutien précieux.",
+            "Internet peut être une source de joie, mais n'oublie pas de te déconnecter pour profiter de tes amis et de la nature.",
+            "Ne succombe pas à la pression de groupe. Dire non à l'alcool ou au tabac, c'est respecter ta santé.",
+            "Le consentement, c'est l'accord de tout le monde. Si quelqu'un est mal à l'aise, c'est un non.",
+            "Dieu t'aime tel que tu es. Sois toi-même et rayonne de l'amour que tu as reçu.",
+            "Si un adulte te met mal à l'aise, parles-en immédiatement à un autre adulte de confiance.",
+            "Gérer son temps de jeu vidéo est essentiel pour ne pas s'isoler. Amuse-toi, mais garde l'équilibre.",
+            "Le protoxyde d'azote est très dangereux pour ta santé. N'écoute pas ceux qui te disent le contraire."
+        ];
+
+        const conseilsEncadrants = [
+            "Soyez attentif aux jeunes qui s'isolent. Un simple 'ça va ?' peut ouvrir la porte à une discussion importante.",
+            "Souviens-toi que tu es un témoin de l'amour de Dieu pour ces jeunes. Ta patience et ta bienveillance sont de petites prières.",
+            "Votre rôle est d'être un adulte responsable, pas un ami. Le respect et la confiance se construisent sur la clarté de votre position.",
+            "Si un jeune vous confie un problème grave, n'agissez pas seul. Orientez-le vers la bonne personne.",
+            "Ne vous isolez jamais avec un mineur. Les discussions importantes doivent se faire en lieu sûr et visible.",
+            "Prie pour les jeunes que tu accompagnes. Ta prière est une force pour eux et pour toi.",
+            "Faites attention à la différence entre l'animation et l'encadrement. Les deux sont importants, mais l'encadrement prime sur la sécurité.",
+            "Soyez un exemple de bienveillance et de respect. Les jeunes apprennent autant par vos actions que par vos paroles.",
+        ];
+
+        // Fonction pour afficher la section correspondante et cacher les autres
+        function showSection(sectionId) {
+            // Récupère toutes les sections de contenu
+            const sections = ['home-screen', 'jeunes-section', 'encadrants-section'];
+            
+            // Masque toutes les sections
+            sections.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+
+            // Affiche la section demandée
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+        }
+
+        // Fonction pour gérer l'accordéon
+        function toggleAccordion(id) {
+            const content = document.getElementById(id + '-content');
+            const icon = document.getElementById(id + '-icon');
+
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.textContent = '+';
+            } else {
+                content.classList.add('open');
+                icon.textContent = '–';
+            }
+        }
+
+        // Fonction pour afficher un conseil aléatoire
+        function displayRandomAdvice(target) {
+            let adviceArray;
+            let displayElement;
+
+            if (target === 'jeunes') {
+                adviceArray = conseilsJeunes;
+                displayElement = document.getElementById('jeunes-advice-display');
+            } else if (target === 'encadrants') {
+                adviceArray = conseilsEncadrants;
+                displayElement = document.getElementById('encadrants-advice-display');
+            }
+
+            // Sélectionne un conseil aléatoire dans le tableau
+            const randomIndex = Math.floor(Math.random() * adviceArray.length);
+            const randomAdvice = adviceArray[randomIndex];
+
+            // Affiche le conseil et rend l'élément visible
+            displayElement.textContent = randomAdvice;
+            displayElement.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
