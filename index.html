@@ -6,6 +6,7 @@
     <title>FRAT 2026 - Prévention et Accompagnement</title>
     <!-- Utilisation de Tailwind CSS pour un design moderne et responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         body {
@@ -50,6 +51,29 @@
         .btn-call:hover {
             transform: scale(1.05);
         }
+        #map-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            max-height: 600px;
+            background-color: #e2e8f0;
+            border-radius: 0.75rem;
+        }
+        #message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            max-width: 350px;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -70,6 +94,9 @@
                 </button>
                 <button onclick="showSection('encadrants-section')" class="bg-gray-800 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-gray-900 transition duration-300 transform hover:scale-105">
                     Espace Encadrants
+                </button>
+                <button onclick="showSection('map-section')" class="bg-emerald-600 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-emerald-700 transition duration-300 transform hover:scale-105">
+                    Carte de Jambville
                 </button>
             </div>
         </div>
@@ -216,6 +243,27 @@
                 Retour à l'accueil
             </button>
         </div>
+
+        <!-- Nouvelle section pour la carte interactive -->
+        <div id="map-section" class="container mx-auto p-6 hidden">
+            <h2 class="text-3xl font-bold section-title text-gray-800">Carte de Jambville</h2>
+            <p class="text-gray-600 mb-6">
+                Cliquez sur les points pour découvrir les lieux importants du site.
+            </p>
+            <div class="relative w-full aspect-w-4 aspect-h-3" style="aspect-ratio: 4/3;">
+                <canvas id="map-canvas" class="rounded-xl shadow-lg"></canvas>
+                <div id="message-box" class="hidden">
+                    <h4 id="message-title" class="text-xl font-bold mb-2 text-gray-900"></h4>
+                    <p id="message-content" class="text-gray-700 mb-4"></p>
+                    <button onclick="hideMessageBox()" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-full hover:bg-indigo-700 transition duration-300">Fermer</button>
+                </div>
+            </div>
+
+            <!-- Bouton pour revenir à l'accueil -->
+            <button onclick="showSection('home-screen')" class="mt-8 bg-gray-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-gray-600 transition duration-300">
+                Retour à l'accueil
+            </button>
+        </div>
     </main>
 
     <!-- Pied de page -->
@@ -237,7 +285,7 @@
         </div>
     </footer>
 
-    <!-- Script JavaScript pour la navigation et les conseils aléatoires -->
+    <!-- Script JavaScript pour la navigation, les conseils aléatoires et la carte -->
     <script>
         // Définition des listes de conseils
         const conseilsJeunes = [
@@ -249,7 +297,11 @@
             "Dieu t'aime tel que tu es. Sois toi-même et rayonne de l'amour que tu as reçu.",
             "Si un adulte te met mal à l'aise, parles-en immédiatement à un autre adulte de confiance.",
             "Gérer son temps de jeu vidéo est essentiel pour ne pas s'isoler. Amuse-toi, mais garde l'équilibre.",
-            "Le protoxyde d'azote est très dangereux pour ta santé. N'écoute pas ceux qui te disent le contraire."
+            "Le protoxyde d'azote est très dangereux pour ta santé. N'écoute pas ceux qui te disent le contraire.",
+            "Ne laisse personne te dicter ce que tu dois penser ou être. Ta foi est un chemin personnel.",
+            "La messe n'est pas une obligation, c'est une rencontre. Ouvre ton cœur pour y trouver la joie.",
+            "Sois un bon ami, à la fois dans la joie et dans la peine. C'est ça, l'esprit du FRAT.",
+            "Si tu te sens dépassé, respire. Pense à un beau souvenir, une prière, ou un chant que tu aimes."
         ];
 
         const conseilsEncadrants = [
@@ -261,12 +313,17 @@
             "Prie pour les jeunes que tu accompagnes. Ta prière est une force pour eux et pour toi.",
             "Faites attention à la différence entre l'animation et l'encadrement. Les deux sont importants, mais l'encadrement prime sur la sécurité.",
             "Soyez un exemple de bienveillance et de respect. Les jeunes apprennent autant par vos actions que par vos paroles.",
+            "Soyez un phare de calme et de sérénité pour les jeunes, surtout dans les moments de tension.",
+            "Rappelez-vous que vous représentez le Christ. Agissez avec l'amour et la compassion qu'il nous a enseignés.",
+            "La meilleure façon d'enseigner est d'écouter. Soyez présents pour les jeunes, sans toujours chercher à parler.",
+            "Le temps est un cadeau. Accordez votre attention pleine et entière à ceux qui en ont besoin.",
+            "S'il y a un conflit, cherchez à comprendre avant de juger. La médiation est une grande qualité d'encadrement."
         ];
 
         // Fonction pour afficher la section correspondante et cacher les autres
         function showSection(sectionId) {
             // Récupère toutes les sections de contenu
-            const sections = ['home-screen', 'jeunes-section', 'encadrants-section'];
+            const sections = ['home-screen', 'jeunes-section', 'encadrants-section', 'map-section'];
             
             // Masque toutes les sections
             sections.forEach(id => {
@@ -318,6 +375,146 @@
             displayElement.textContent = randomAdvice;
             displayElement.classList.remove('hidden');
         }
+
+        // --- Fonctions pour la carte interactive ---
+
+        let scene, camera, renderer, raycaster, mouse;
+        let mapMesh;
+        let pois = []; // Points of Interest
+
+        function initMap() {
+            const container = document.getElementById('map-section');
+            const canvas = document.getElementById('map-canvas');
+            
+            // Scene setup
+            scene = new THREE.Scene();
+            camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 1000);
+            camera.position.z = 10;
+            
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setClearColor(0x000000, 0); // Transparent background
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Raycaster for mouse interaction
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Load map texture
+            const loader = new THREE.TextureLoader();
+            const mapTexture = loader.load('https://placehold.co/1024x768/dbeafe/1e3a8a?text=Plan+de+Jambville+FRAT+2026', () => {
+                const mapAspect = mapTexture.image.width / mapTexture.image.height;
+                const canvasAspect = canvas.clientWidth / canvas.clientHeight;
+
+                let width = 2;
+                let height = 2;
+                if (mapAspect > canvasAspect) {
+                    height = width / mapAspect;
+                } else {
+                    width = height * mapAspect;
+                }
+                const mapGeometry = new THREE.PlaneGeometry(width, height);
+                const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
+                mapMesh = new THREE.Mesh(mapGeometry, mapMaterial);
+                scene.add(mapMesh);
+
+                // Add POIs
+                addPOI(-0.5, 0.4, 'Chapelle', 'Le cœur spirituel du FRAT. Un lieu de recueillement et de prière.');
+                addPOI(0.2, 0.5, 'Scène principale', 'Lieu des célébrations, concerts et grands rassemblements.');
+                addPOI(0.6, -0.3, 'Accueil', 'Le point d\'entrée pour toutes les informations et les premiers secours.');
+                addPOI(-0.3, -0.6, 'Espace Restauration', 'Le lieu où l\'on partage les repas en communauté.');
+                addPOI(0, 0, 'Camps Jeunes', 'Le lieu de vie des jeunes, avec leurs tentes et leurs animateurs.');
+
+                // Start the animation loop
+                animateMap();
+            });
+
+            // Event listeners
+            window.addEventListener('resize', onWindowResize, false);
+            canvas.addEventListener('mousemove', onMouseMove, false);
+            canvas.addEventListener('click', onCanvasClick, false);
+        }
+
+        // Add a Point of Interest
+        function addPOI(x, y, title, content) {
+            const poigeometry = new THREE.CircleGeometry(0.05, 32);
+            const poimaterial = new THREE.MeshBasicMaterial({ color: 0xfcd34d, transparent: true, opacity: 0.8 });
+            const poiMesh = new THREE.Mesh(poigeometry, poimaterial);
+            poiMesh.position.set(x, y, 0.1);
+            poiMesh.userData = { title, content }; // Store data for the message box
+            scene.add(poiMesh);
+            pois.push(poiMesh);
+        }
+
+        function onWindowResize() {
+            const canvas = document.getElementById('map-canvas');
+            const mapAspect = 1024 / 768; // Based on placeholder image
+            const canvasAspect = canvas.clientWidth / canvas.clientHeight;
+            
+            let width = 2;
+            let height = 2;
+            if (mapAspect > canvasAspect) {
+                height = width / mapAspect;
+            } else {
+                width = height * mapAspect;
+            }
+            if (mapMesh) {
+                mapMesh.geometry.dispose();
+                mapMesh.geometry = new THREE.PlaneGeometry(width, height);
+            }
+
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            animateMap();
+        }
+
+        function onMouseMove(event) {
+            const canvas = event.target;
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = - ((event.clientY - rect.top) / rect.height) * 2 + 1;
+        }
+
+        function onCanvasClick(event) {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(pois);
+            if (intersects.length > 0) {
+                const poi = intersects[0].object;
+                showMessageBox(poi.userData.title, poi.userData.content);
+            }
+        }
+        
+        function showMessageBox(title, content) {
+            const messageBox = document.getElementById('message-box');
+            document.getElementById('message-title').textContent = title;
+            document.getElementById('message-content').textContent = content;
+            messageBox.style.display = 'block';
+        }
+
+        function hideMessageBox() {
+            const messageBox = document.getElementById('message-box');
+            messageBox.style.display = 'none';
+        }
+
+        function animateMap() {
+            requestAnimationFrame(animateMap);
+            renderer.render(scene, camera);
+        }
+
+        // Initialize the map when the map-section is shown for the first time
+        window.onload = function() {
+            // Check if the map has already been initialized
+            const mapSection = document.getElementById('map-section');
+            if (mapSection && mapSection.classList.contains('hidden') === false && !scene) {
+                initMap();
+            }
+            // Overriding the showSection to also handle map initialization
+            const originalShowSection = showSection;
+            window.showSection = function(sectionId) {
+                originalShowSection(sectionId);
+                if (sectionId === 'map-section' && !scene) {
+                    initMap();
+                }
+            };
+        };
     </script>
 </body>
 </html>
